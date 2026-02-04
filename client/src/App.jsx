@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
-import { nanoid } from 'nanoid';
 import Note from './components/Note';
 import NoteInput from './components/NoteInput';
 

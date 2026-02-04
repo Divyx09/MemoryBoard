@@ -12,6 +12,7 @@ A modern, real-time digital notice board where anyone can drop short notes, thou
 - 🎨 **Colorful Design**: Random pastel colors for each note
 - 🔄 **Real-time Sync**: Updates instantly across all connected users
 - 💾 **Persistent Storage**: Notes saved to MongoDB
+- 🛡️ **Rate Limiting**: Protection against abuse with request rate limiting
 - 📊 **Live Counter**: Shows total number of memories in real-time
 - 🎯 **Z-Index Management**: Recently moved notes appear on top
 - 📱 **Responsive**: Works on desktop, tablets, and mobile devices
@@ -29,6 +30,7 @@ A modern, real-time digital notice board where anyone can drop short notes, thou
 - **Node.js** - Runtime environment
 - **Express** - Web framework
 - **Socket.io** - WebSocket communication
+- **express-rate-limit** - Rate limiting middleware
 - **MongoDB** - NoSQL database
 - **Mongoose** - MongoDB ODM
 
