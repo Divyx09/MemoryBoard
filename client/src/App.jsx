@@ -5,13 +5,13 @@ import NoteInput from './components/NoteInput';
 
 // Define pastel color palette
 const COLORS = [
-  '#fef3c7', // yellow
-  '#fecaca', // soft red
+  '#fef08a', // bright yellow
+  '#fecaca', // soft pink
   '#bfdbfe', // light blue
-  '#ddd6fe', // lavender
   '#bbf7d0', // mint green
   '#fbcfe8', // pink
   '#fed7aa', // peach
+  '#ddd6fe', // lavender
   '#c7d2fe', // periwinkle
 ];
 
@@ -96,7 +96,7 @@ function App() {
 
       {/* Header */}
       <header className="header">
-        <h1 className="app-title">Memory Board</h1>
+        <h1 className="app-title">SAIT-2k26 Memory Board</h1>
         <div className="connection-status">
           <span
             className={`status-dot ${connectionStatus === 'connected' ? 'connected' : ''}`}

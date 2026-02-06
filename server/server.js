@@ -44,7 +44,7 @@ const io = new Server(httpServer, {
 });
 
 // MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/memoryboard';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Divyx09:4235deep@memoryboard.iglq4sg.mongodb.net/?appName=memoryBoard';
 mongoose
   .connect(MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
