@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Note from './components/Note';
 import NoteInput from './components/NoteInput';
+import ShapeSelector from './components/ShapeSelector';
 
 // Define pastel color palette
 const COLORS = [
-  '#fef3c7', // yellow
-  '#fecaca', // soft red
+  '#fef08a', // bright yellow
+  '#fecaca', // soft pink
   '#bfdbfe', // light blue
-  '#ddd6fe', // lavender
   '#bbf7d0', // mint green
   '#fbcfe8', // pink
   '#fed7aa', // peach
+  '#ddd6fe', // lavender
   '#c7d2fe', // periwinkle
 ];
 
@@ -24,6 +25,7 @@ function App() {
   const [notes, setNotes] = useState([]);
   const [socket, setSocket] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState('connecting');
+  const [selectedShape, setSelectedShape] = useState('rectangle');
 
   useEffect(() => {
     // Initialize socket connection
@@ -56,8 +58,10 @@ function App() {
     fetch(`${SERVER_URL}/notes`)
       .then((res) => res.json())
       .then((data) => {
-        console.log('📥 Fetched initial notes:', data.length);
-        setNotes(data);
+        console.log('📥 Fetched initial notes:', data?.length || 0);
+        if (Array.isArray(data)) {
+          setNotes(data);
+        }
       })
       .catch((err) => console.error('Error fetching notes:', err));
 
@@ -67,13 +71,14 @@ function App() {
     };
   }, []);
 
-  const handleCreateNote = ({ content, x, y }) => {
+  const handleCreateNote = ({ content, x, y, shape }) => {
     if (!socket) return;
 
     const noteData = {
       content,
       x,
       y,
+      shape: shape || 'rectangle',
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
       rotation: getRandomRotation(),
     };
@@ -96,7 +101,7 @@ function App() {
 
       {/* Header */}
       <header className="header">
-        <h1 className="app-title">Memory Board</h1>
+        <h1 className="app-title">SAIT-2k26 Memory Board</h1>
         <div className="connection-status">
           <span
             className={`status-dot ${connectionStatus === 'connected' ? 'connected' : ''}`}
@@ -111,8 +116,18 @@ function App() {
         <div className="counter-label">memories</div>
       </div>
 
+      {/* Shape Selector */}
+      <ShapeSelector 
+        selectedShape={selectedShape} 
+        onShapeChange={setSelectedShape} 
+      />
+
       {/* Note input */}
-      <NoteInput onCreateNote={handleCreateNote} />
+      <NoteInput 
+        onCreateNote={handleCreateNote}
+        selectedShape={selectedShape}
+        onShapeChange={setSelectedShape}
+      />
 
       {/* Board with notes */}
       <div className="board">

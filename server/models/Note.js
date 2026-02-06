@@ -27,6 +27,11 @@ const noteSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    shape: {
+      type: String,
+      enum: ['rectangle', 'square', 'circle', 'oval', 'star', 'heart', 'hexagon', 'triangle'],
+      default: 'rectangle',
+    },
   },
   {
     timestamps: true,

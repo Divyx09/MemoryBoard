@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const NoteInput = ({ onCreateNote }) => {
+const NoteInput = ({ onCreateNote, selectedShape, onShapeChange }) => {
   const [content, setContent] = useState('');
   const inputRef = useRef(null);
 
@@ -30,6 +30,7 @@ const NoteInput = ({ onCreateNote }) => {
       content: content.trim(),
       x: randomX,
       y: randomY,
+      shape: selectedShape,
     });
 
     // Clear input and refocus

@@ -1,4 +1,4 @@
-# 📌 Memory Board
+# 📌 SAIT-2k26 Memory Board
 
 A modern, real-time digital notice board where anyone can drop short notes, thoughts, and memories. Built with React, Node.js, Socket.io, and MongoDB.
 

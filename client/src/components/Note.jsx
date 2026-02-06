@@ -13,7 +13,7 @@ const Note = ({ note, onDragStop }) => {
     >
       <div
         ref={nodeRef}
-        className="note"
+        className={`note note-${note.shape || 'rectangle'}`}
         style={{
           backgroundColor: note.color,
           transform: `rotate(${note.rotation}deg)`,
