@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import ShapeSelector from './ShapeSelector';
 
-const NoteInput = ({ onCreateNote }) => {
+const NoteInput = ({ onCreateNote, selectedShape, onShapeChange }) => {
   const [content, setContent] = useState('');
-  const [selectedShape, setSelectedShape] = useState('rectangle');
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -51,10 +49,6 @@ const NoteInput = ({ onCreateNote }) => {
 
   return (
     <div className="note-input-container">
-      <ShapeSelector 
-        selectedShape={selectedShape} 
-        onShapeChange={setSelectedShape} 
-      />
       <form className="note-input-form" onSubmit={handleSubmit}>
         <input
           ref={inputRef}

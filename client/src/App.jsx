@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Note from './components/Note';
 import NoteInput from './components/NoteInput';
+import ShapeSelector from './components/ShapeSelector';
 
 // Define pastel color palette
 const COLORS = [
@@ -24,6 +25,7 @@ function App() {
   const [notes, setNotes] = useState([]);
   const [socket, setSocket] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState('connecting');
+  const [selectedShape, setSelectedShape] = useState('rectangle');
 
   useEffect(() => {
     // Initialize socket connection
@@ -56,8 +58,10 @@ function App() {
     fetch(`${SERVER_URL}/notes`)
       .then((res) => res.json())
       .then((data) => {
-        console.log('📥 Fetched initial notes:', data.length);
-        setNotes(data);
+        console.log('📥 Fetched initial notes:', data?.length || 0);
+        if (Array.isArray(data)) {
+          setNotes(data);
+        }
       })
       .catch((err) => console.error('Error fetching notes:', err));
 
@@ -112,8 +116,18 @@ function App() {
         <div className="counter-label">memories</div>
       </div>
 
+      {/* Shape Selector */}
+      <ShapeSelector 
+        selectedShape={selectedShape} 
+        onShapeChange={setSelectedShape} 
+      />
+
       {/* Note input */}
-      <NoteInput onCreateNote={handleCreateNote} />
+      <NoteInput 
+        onCreateNote={handleCreateNote}
+        selectedShape={selectedShape}
+        onShapeChange={setSelectedShape}
+      />
 
       {/* Board with notes */}
       <div className="board">
