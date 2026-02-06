@@ -333,3 +333,157 @@ body {
     font-size: 0.75rem;
   }
 }
+
+/* Shape Selector Styles */
+.shape-selector {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-width: 200px;
+}
+
+.shape-selector-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #334155;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.shape-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.shape-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shape-option:hover {
+  border-color: #7c3aed;
+  transform: scale(1.05);
+}
+
+.shape-option.active {
+  border-color: #7c3aed;
+  background: #f3e8ff;
+}
+
+.shape-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.shape-name {
+  font-size: 0.625rem;
+  color: #64748b;
+}
+
+/* Note Shape Styles */
+.note-rectangle {
+  width: 220px;
+  min-height: 180px;
+  border-radius: 4px;
+}
+
+.note-square {
+  width: 200px;
+  height: 200px;
+  border-radius: 4px;
+}
+
+.note-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.note-oval {
+  width: 240px;
+  height: 180px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.note-star {
+  width: 220px;
+  min-height: 180px;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.note-heart {
+  width: 200px;
+  height: 180px;
+  clip-path: path('M12,21.35l-1.45-1.32C5.4,15.36,2,12.28,2,8.5C2,5.42,4.42,3,7.5,3c1.74,0,3.41,0.81,4.5,2.09C13.09,3.81,14.76,3,16.5,3 C19.58,3,22,5.42,22,8.5c0,3.78-3.4,6.86-8.55,11.54L12,21.35z');
+  position: relative;
+}
+
+.note-heart::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 90px;
+  background: inherit;
+  border-radius: 50px 50px 0 0;
+  top: -50px;
+  left: 0;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.note-heart::after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 90px;
+  background: inherit;
+  border-radius: 50px 50px 0 0;
+  top: -50px;
+  right: 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+.note-hexagon {
+  width: 200px;
+  height: 180px;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.note-triangle {
+  width: 200px;
+  height: 180px;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+/* Adjust content positioning for non-rectangular shapes */
+.note-circle .note-content,
+.note-oval .note-content,
+.note-star .note-content,
+.note-heart .note-content,
+.note-hexagon .note-content,
+.note-triangle .note-content {
+  text-align: center;
+  padding: 1rem;
+  overflow: hidden;
+  max-height: 100%;
+}

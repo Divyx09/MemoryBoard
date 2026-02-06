@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ShapeSelector from './ShapeSelector';
 
 const NoteInput = ({ onCreateNote }) => {
   const [content, setContent] = useState('');
+  const [selectedShape, setSelectedShape] = useState('rectangle');
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -30,6 +32,7 @@ const NoteInput = ({ onCreateNote }) => {
       content: content.trim(),
       x: randomX,
       y: randomY,
+      shape: selectedShape,
     });
 
     // Clear input and refocus
@@ -48,6 +51,10 @@ const NoteInput = ({ onCreateNote }) => {
 
   return (
     <div className="note-input-container">
+      <ShapeSelector 
+        selectedShape={selectedShape} 
+        onShapeChange={setSelectedShape} 
+      />
       <form className="note-input-form" onSubmit={handleSubmit}>
         <input
           ref={inputRef}

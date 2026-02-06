@@ -67,13 +67,14 @@ function App() {
     };
   }, []);
 
-  const handleCreateNote = ({ content, x, y }) => {
+  const handleCreateNote = ({ content, x, y, shape }) => {
     if (!socket) return;
 
     const noteData = {
       content,
       x,
       y,
+      shape: shape || 'rectangle',
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
       rotation: getRandomRotation(),
     };
