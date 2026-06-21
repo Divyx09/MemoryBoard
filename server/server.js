@@ -1,6 +1,4 @@
 import express from 'express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -11,7 +9,6 @@ import Note from './models/Note.js';
 dotenv.config();
 
 const app = express();
-const httpServer = createServer(app);
 
 // Configure CORS
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
@@ -33,15 +30,6 @@ const limiter = rateLimit({
 
 // Apply rate limiter to all requests
 app.use(limiter);
-
-// Configure Socket.io with CORS
-const io = new Server(httpServer, {
-  cors: {
-    origin: CLIENT_URL,
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-});
 
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -72,72 +60,89 @@ app.get('/notes', async (req, res) => {
   }
 });
 
-// Socket.io connection handling
-io.on('connection', (socket) => {
-  console.log('🔌 Client connected:', socket.id);
+// Create a new note
+app.post('/notes', async (req, res) => {
+  try {
+    console.log('📝 Creating note:', req.body);
+    
+    // Find the highest zIndex
+    const highestNote = await Note.findOne().sort({ zIndex: -1 });
+    const newZIndex = highestNote ? highestNote.zIndex + 1 : 1;
 
-  // Handle creating a new note
-  socket.on('createNote', async (noteData) => {
-    try {
-      console.log('📝 Creating note:', noteData);
-      
-      // Find the highest zIndex
-      const highestNote = await Note.findOne().sort({ zIndex: -1 });
-      const newZIndex = highestNote ? highestNote.zIndex + 1 : 1;
+    // Create and save the note
+    const note = new Note({
+      ...req.body,
+      zIndex: newZIndex,
+    });
+    await note.save();
+    
+    console.log('✅ Note created successfully');
+    res.status(201).json(note);
+  } catch (error) {
+    console.error('❌ Error creating note:', error);
+    res.status(500).json({ error: 'Failed to create note' });
+  }
+});
 
-      // Create and save the note
-      const note = new Note({
-        ...noteData,
-        zIndex: newZIndex,
-      });
-      await note.save();
+// Update note position, content, or name (and bring to front)
+app.put('/notes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { x, y, content, name } = req.body;
+    
+    console.log('📍 Updating note:', { id, x, y, content, name });
+    
+    // Find the highest zIndex to bring this note to front
+    const highestNote = await Note.findOne().sort({ zIndex: -1 });
+    const newZIndex = highestNote ? highestNote.zIndex + 1 : 1;
 
-      // Broadcast all notes to all clients
-      const allNotes = await Note.find().sort({ createdAt: 1 });
-      io.emit('notes', allNotes);
-      
-      console.log('✅ Note created successfully');
-    } catch (error) {
-      console.error('❌ Error creating note:', error);
-      socket.emit('error', { message: 'Failed to create note' });
+    // Build the dynamic update object
+    const updateData = { zIndex: newZIndex };
+    if (x !== undefined) updateData.x = x;
+    if (y !== undefined) updateData.y = y;
+    if (content !== undefined) updateData.content = content;
+    if (name !== undefined) updateData.name = name;
+
+    // Update note and bring to front
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedNote) {
+      return res.status(404).json({ error: 'Note not found' });
     }
-  });
+    
+    console.log('✅ Note position updated successfully');
+    res.json(updatedNote);
+  } catch (error) {
+    console.error('❌ Error updating note position:', error);
+    res.status(500).json({ error: 'Failed to update note position' });
+  }
+});
 
-  // Handle updating note position
-  socket.on('updateNotePosition', async ({ id, x, y }) => {
-    try {
-      console.log('📍 Updating note position:', { id, x, y });
-      
-      // Find the highest zIndex to bring this note to front
-      const highestNote = await Note.findOne().sort({ zIndex: -1 });
-      const newZIndex = highestNote ? highestNote.zIndex + 1 : 1;
-
-      // Update note position and bring to front
-      await Note.findByIdAndUpdate(id, {
-        x,
-        y,
-        zIndex: newZIndex,
-      });
-
-      // Broadcast all notes to all clients
-      const allNotes = await Note.find().sort({ createdAt: 1 });
-      io.emit('notes', allNotes);
-      
-      console.log('✅ Note position updated successfully');
-    } catch (error) {
-      console.error('❌ Error updating note position:', error);
-      socket.emit('error', { message: 'Failed to update note position' });
+// Delete a note
+app.delete('/notes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedNote = await Note.findByIdAndDelete(id);
+    
+    if (!deletedNote) {
+      return res.status(404).json({ error: 'Note not found' });
     }
-  });
-
-  socket.on('disconnect', () => {
-    console.log('🔌 Client disconnected:', socket.id);
-  });
+    
+    console.log('✅ Note deleted successfully');
+    res.json({ message: 'Note deleted successfully' });
+  } catch (error) {
+    console.error('❌ Error deleting note:', error);
+    res.status(500).json({ error: 'Failed to delete note' });
+  }
 });
 
 // Start server
 const PORT = process.env.PORT || 3001;
-httpServer.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📡 Socket.io listening for connections`);
+  console.log(`📡 REST API ready at http://localhost:${PORT}`);
 });

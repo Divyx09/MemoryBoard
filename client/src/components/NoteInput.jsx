@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 
 const NoteInput = ({ onCreateNote, selectedShape, onShapeChange }) => {
   const [content, setContent] = useState('');
+  const [name, setName] = useState('');
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -19,21 +20,20 @@ const NoteInput = ({ onCreateNote, selectedShape, onShapeChange }) => {
       return;
     }
 
-    // Calculate random position near center
-    const centerX = window.innerWidth / 2 - 110; // 110 is half of note width
-    const centerY = window.innerHeight / 2 - 90; // 90 is half of note height
-    const randomX = centerX + (Math.random() - 0.5) * 300;
-    const randomY = centerY + (Math.random() - 0.5) * 200;
+    // Calculate random percentage coordinates near center (35% to 65%)
+    const randomX = 50 + (Math.random() - 0.5) * 30;
+    const randomY = 50 + (Math.random() - 0.5) * 25;
 
     // Call the callback with the note data
     onCreateNote({
       content: content.trim(),
+      name: name.trim(),
       x: randomX,
       y: randomY,
       shape: selectedShape,
     });
 
-    // Clear input and refocus
+    // Clear content input and refocus, but keep the name for consecutive drops
     setContent('');
     if (inputRef.current) {
       inputRef.current.focus();
@@ -50,6 +50,15 @@ const NoteInput = ({ onCreateNote, selectedShape, onShapeChange }) => {
   return (
     <div className="note-input-container">
       <form className="note-input-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          className="name-input"
+          placeholder="Your name..."
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          maxLength={50}
+        />
+        <div className="input-divider" />
         <input
           ref={inputRef}
           type="text"

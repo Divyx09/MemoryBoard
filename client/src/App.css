@@ -7,7 +7,7 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #7c3aed;
+  background: #0f172a;
   overflow: hidden;
   width: 100vw;
   height: 100vh;
@@ -21,33 +21,78 @@ body {
   overflow: hidden;
 }
 
-/* Background Texture Overlay */
-.background-texture {
+/* Background Image Container */
+.background-image-container {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+/* Background Video Container */
+.background-video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+  background: #020617;
+  pointer-events: none;
+}
+
+.background-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  object-fit: cover;
+  transition: transform 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out;
+}
+
+/* Video Orientation Rotations */
+.background-video.rotate-0 {
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.background-video.rotate-90 {
+  width: 100vh;
+  height: 100vw;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.background-video.rotate-180 {
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.background-video.rotate-270 {
+  width: 100vh;
+  height: 100vw;
+  transform: translate(-50%, -50%) rotate(270deg);
+}
+
+.video-overlay {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.03),
-      rgba(255, 255, 255, 0.03) 1px,
-      transparent 1px,
-      transparent 2px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.03),
-      rgba(255, 255, 255, 0.03) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-  pointer-events: none;
+  background: rgba(15, 23, 42, 0.55);
   z-index: 1;
 }
 
-/* Header */
+/* Header styling */
 .header {
   position: fixed;
   top: 0;
@@ -56,71 +101,46 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
   z-index: 100;
 }
 
 .app-title {
   font-family: 'Caveat', cursive;
-  font-size: 3rem;
+  font-size: 2.8rem;
   font-weight: 700;
-  color: #667eea;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #c084fc, #a78bfa, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   letter-spacing: 1px;
 }
 
-.connection-status {
+
+
+/* Note Counter badge */
+.note-counter {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0.5rem 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transform: rotate(-1.5deg);
+  transition: transform 0.2s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #64748b;
-}
-
-.status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: #ef4444;
-  transition: background-color 0.3s ease;
-}
-
-.status-dot.connected {
-  background-color: #22c55e;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.status-text {
-  text-transform: capitalize;
-  font-weight: 500;
-}
-
-/* Note Counter */
-.note-counter {
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  background: white;
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-  z-index: 100;
-  text-align: center;
-  border: 3px solid #667eea;
-  transform: rotate(-2deg);
-  transition: transform 0.2s ease;
 }
 
 .note-counter:hover {
@@ -129,21 +149,21 @@ body {
 
 .counter-number {
   font-family: 'Caveat', cursive;
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #667eea;
+  color: #c084fc;
   line-height: 1;
 }
 
 .counter-label {
-  font-size: 0.875rem;
-  color: #64748b;
-  text-transform: lowercase;
-  margin-top: 0.25rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
-/* Note Input Container */
+/* Note Input Form */
 .note-input-container {
   position: fixed;
   bottom: 2rem;
@@ -158,11 +178,35 @@ body {
 .note-input-form {
   display: flex;
   gap: 0.75rem;
-  background: white;
-  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 0.6rem;
   border-radius: 50px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.name-input {
+  width: 140px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  font-family: 'Inter', sans-serif;
+  background: transparent;
+  color: #f8fafc;
+}
+
+.name-input::placeholder {
+  color: #64748b;
+}
+
+.input-divider {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  align-self: stretch;
+  margin: 0.5rem 0;
 }
 
 .note-input {
@@ -170,33 +214,33 @@ body {
   border: none;
   outline: none;
   font-size: 1rem;
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1.5rem;
   font-family: 'Inter', sans-serif;
   background: transparent;
-  color: #1e293b;
+  color: #f8fafc;
 }
 
 .note-input::placeholder {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .drop-button {
-  background: #7c3aed;
+  background: linear-gradient(135deg, #7c3aed, #6366f1);
   color: white;
   border: none;
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 2.25rem;
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 6px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
 }
 
 .drop-button:hover:not(:disabled) {
-  background: #6d28d9;
+  background: linear-gradient(135deg, #6d28d9, #4f46e5);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.5);
 }
 
 .drop-button:active:not(:disabled) {
@@ -204,12 +248,14 @@ body {
 }
 
 .drop-button:disabled {
-  opacity: 0.5;
+  opacity: 0.35;
   cursor: not-allowed;
   box-shadow: none;
+  background: #475569;
+  color: #94a3b8;
 }
 
-/* Board */
+/* Board Layout */
 .board {
   position: relative;
   width: 100%;
@@ -217,141 +263,335 @@ body {
   z-index: 10;
 }
 
-/* Note Styles */
-.note {
+/* Note Container Wrapper (Handles dragging translation and dropshadow mask) */
+.note-container {
   position: absolute;
-  width: 220px;
-  min-height: 180px;
-  padding: 1.5rem;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3)) 
+          drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
   cursor: move;
   user-select: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* NO transform transitions here so react-draggable drags instantly and smoothly */
+}
+
+.note-container:hover {
+  z-index: 9999 !important; /* Bring hovered note to front */
+}
+
+.note-container:active {
+  cursor: grabbing;
+}
+
+/* Glassmorphism Note Styling */
+.note {
+  position: relative;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: none; /* Shadow handled by parent drop-shadow filter */
+  cursor: inherit;
+  user-select: none;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  /* Transition scale and border-color without affecting draggable transform positioning */
+  transition: scale 0.2s ease, border-color 0.2s ease;
+  
+  /* Text vertical and horizontal centering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .note:hover {
-  transform: scale(1.02);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.note:active {
-  cursor: grabbing;
+  scale: 1.04; /* Separate scale property doesn't clash with draggable translate transforms */
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .note-content {
   font-family: 'Caveat', cursive;
-  font-size: 1.25rem;
-  line-height: 1.6;
-  color: #1e293b;
+  font-size: 1.35rem;
+  line-height: 1.4;
+  color: #0f172a;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.55);
   white-space: pre-wrap;
+  text-align: center;
+  width: 100%;
 }
 
-/* Responsive Design - Tablets */
-@media (max-width: 1024px) {
-  .app-title {
-    font-size: 2.5rem;
-  }
-
-  .note-counter {
-    top: 1.5rem;
-    right: 1.5rem;
-    padding: 0.75rem 1.25rem;
-  }
-
-  .counter-number {
-    font-size: 2rem;
-  }
-
-  .note {
-    width: 200px;
-    min-height: 160px;
-    padding: 1.25rem;
-  }
-
-  .note-content {
-    font-size: 1.125rem;
-  }
+.note-author {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem;
+  color: rgba(15, 23, 42, 0.75);
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+  pointer-events: none;
 }
 
-/* Responsive Design - Mobile */
-@media (max-width: 640px) {
-  .header {
-    padding: 1rem 1.5rem;
-  }
+/* Shape specific positioning for signature to avoid clipping */
+.note-pentagon .note-author {
+  bottom: 15px;
+  right: 30px;
+}
 
-  .app-title {
-    font-size: 2rem;
-  }
+.note-oval .note-author {
+  bottom: 20px;
+  right: 35px;
+}
 
-  .note-counter {
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem 1rem;
-  }
+/* Edit Button & Editing Mode Styles */
+.note-edit-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #0f172a;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  opacity: 0; /* Hidden by default, fades in on hover */
+  transition: all 0.2s ease;
+  z-index: 50;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .counter-number {
-    font-size: 1.75rem;
-  }
+.note:hover .note-edit-btn {
+  opacity: 1;
+}
 
-  .counter-label {
-    font-size: 0.75rem;
-  }
+.note-edit-btn:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: scale(1.1);
+}
 
-  .note-input-container {
-    bottom: 1rem;
-    max-width: calc(100% - 2rem);
-  }
+/* Shape-safe Edit Button Overrides */
+.note-pentagon .note-edit-btn {
+  top: 25px;
+  right: 25px;
+}
 
-  .note-input-form {
-    padding: 0.5rem;
-  }
+.note-oval .note-edit-btn {
+  top: 15px;
+  right: 25px;
+}
 
-  .note-input {
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-  }
+/* Editing Layout inside Card */
+.note.editing {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1.25rem 1rem 2.5rem 1rem;
+}
 
-  .drop-button {
-    padding: 0.5rem 1.5rem;
-    font-size: 0.875rem;
-  }
+.note-content-input {
+  width: 100%;
+  height: 60%;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 0.5rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: #0f172a;
+  resize: none;
+  outline: none;
+  text-align: center;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
 
-  .note {
-    width: 180px;
-    min-height: 140px;
-    padding: 1rem;
-  }
+.note-content-input:focus {
+  border-color: rgba(15, 23, 42, 0.35);
+  background: rgba(255, 255, 255, 0.4);
+}
 
-  .note-content {
-    font-size: 1rem;
-  }
+.note-name-input {
+  width: 70%;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem;
+  color: #0f172a;
+  outline: none;
+  text-align: center;
+  margin-top: 10px;
+}
 
-  .connection-status {
-    font-size: 0.75rem;
-  }
+.note-name-input:focus {
+  border-color: rgba(15, 23, 42, 0.35);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.note-edit-actions {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.edit-action-btn {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  color: #0f172a;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.edit-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Save / Cancel color states for premium UX */
+.edit-action-btn.save-btn:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #15803d;
+  transform: scale(1.1);
+}
+
+.edit-action-btn.cancel-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #b91c1c;
+  transform: scale(1.1);
+}
+
+.note-edit-btn svg,
+.edit-action-btn svg {
+  display: block;
+  stroke: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.note-edit-btn:hover svg,
+.edit-action-btn:hover:not(:disabled) svg {
+  transform: rotate(15deg);
+}
+
+/* Shape-specific input and action safety overrides */
+.note-pentagon.editing {
+  padding: 2.2rem 1.5rem 2.8rem 1.5rem;
+}
+
+.note-pentagon .note-content-input {
+  width: 85%;
+  height: 48%;
+  font-size: 1.15rem;
+}
+
+.note-pentagon .note-name-input {
+  width: 60%;
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+.note-pentagon .note-edit-actions {
+  bottom: 12px;
+  right: 25px;
+}
+
+.note-oval.editing {
+  padding: 1.5rem 2rem 2.8rem 2rem;
+}
+
+.note-oval .note-content-input {
+  width: 85%;
+  height: 50%;
+  font-size: 1.15rem;
+}
+
+.note-oval .note-name-input {
+  width: 60%;
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+.note-oval .note-edit-actions {
+  bottom: 18px;
+  right: 32px;
+}
+
+/* Note Shape Customizations */
+.note-rectangle {
+  width: 230px;
+  height: 160px;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.note-square {
+  width: 180px;
+  height: 180px;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.note-pentagon {
+  width: 200px;
+  height: 200px;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  padding: 2.2rem 1.6rem 1.5rem 1.6rem; /* extra top padding to keep text centered inside pentagon layout */
+}
+
+.note-oval {
+  width: 230px;
+  height: 160px;
+  border-radius: 50%;
+  padding: 1.5rem 2rem;
+}
+
+/* Circle fallback (if needed) */
+.note-circle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  padding: 1.5rem;
 }
 
 /* Shape Selector Styles */
 .shape-selector {
   position: fixed;
-  top: 100px;
+  top: 90px;
   left: 20px;
-  background: white;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   z-index: 100;
-  max-width: 200px;
+  width: 180px;
+  transition: all 0.3s ease;
 }
 
 .shape-selector-label {
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: #334155;
-  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  margin-bottom: 0.75rem;
   display: block;
 }
 
@@ -365,98 +605,195 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.5rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  background: white;
+  padding: 0.6rem 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .shape-option:hover {
-  border-color: #7c3aed;
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.1);
   transform: scale(1.05);
 }
 
 .shape-option.active {
-  border-color: #7c3aed;
-  background: #f3e8ff;
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.35);
 }
 
 .shape-icon {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin-bottom: 0.25rem;
+  color: #a78bfa;
+}
+
+.shape-option.active .shape-icon {
+  color: #c084fc;
 }
 
 .shape-name {
-  font-size: 0.625rem;
-  color: #64748b;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
-/* Note Shape Styles */
-.note-rectangle {
-  width: 220px;
-  min-height: 180px;
-  border-radius: 4px;
+.shape-option.active .shape-name {
+  color: white;
 }
 
-.note-square {
-  width: 200px;
-  height: 200px;
-  border-radius: 4px;
+/* Tablet Responsiveness */
+@media (max-width: 1024px) {
+  .app-title {
+    font-size: 2.3rem;
+  }
+
+  .note-rectangle {
+    width: 200px;
+    height: 140px;
+  }
+
+  .note-square {
+    width: 160px;
+    height: 160px;
+  }
+
+  .note-pentagon {
+    width: 170px;
+    height: 170px;
+    padding-top: 1.8rem;
+  }
+
+  .note-oval {
+    width: 200px;
+    height: 140px;
+  }
+
+  .note-content {
+    font-size: 1.15rem;
+  }
 }
 
-.note-circle {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .header {
+    padding: 0.75rem 1.25rem;
+  }
 
-.note-oval {
-  width: 240px;
-  height: 180px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .app-title {
+    font-size: 1.8rem;
+  }
 
-.note-star {
-  width: 220px;
-  min-height: 180px;
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-}
+  .note-counter {
+    top: 75px;
+    bottom: auto;
+    right: 15px;
+    padding: 0.4rem 0.8rem;
+  }
 
-.note-heart {
-  width: 200px;
-  height: 180px;
-  clip-path: polygon(50% 20%, 100% 0%, 100% 40%, 50% 100%, 0% 40%, 0% 0%);
-}
+  .counter-number {
+    font-size: 1.4rem;
+  }
 
-.note-hexagon {
-  width: 200px;
-  height: 180px;
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-}
+  .counter-label {
+    font-size: 0.65rem;
+  }
 
-.note-triangle {
-  width: 200px;
-  height: 180px;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-}
+  .shape-selector {
+    top: 75px;
+    bottom: auto;
+    left: 15px;
+    width: 150px;
+    padding: 0.75rem;
+  }
 
-/* Adjust content positioning for non-rectangular shapes */
-.note-circle .note-content,
-.note-oval .note-content,
-.note-star .note-content,
-.note-heart .note-content,
-.note-hexagon .note-content,
-.note-triangle .note-content {
-  text-align: center;
-  padding: 1rem;
-  overflow: hidden;
-  max-height: 100%;
+  .shape-icon {
+    font-size: 1.2rem;
+  }
+
+  .shape-name {
+    font-size: 0.65rem;
+  }
+
+  .note-input-container {
+    bottom: 1rem;
+    max-width: calc(100% - 1.5rem);
+  }
+
+  .note-input-form {
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .name-input {
+    width: 100%;
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .input-divider {
+    display: none;
+  }
+
+  .note-input {
+    font-size: 0.875rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .drop-button {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .note-rectangle {
+    width: 160px;
+    height: 120px;
+    padding: 1rem;
+  }
+
+  .note-square {
+    width: 130px;
+    height: 130px;
+    padding: 1rem;
+  }
+
+  .note-pentagon {
+    width: 140px;
+    height: 140px;
+    padding: 1.5rem 1rem 1rem 1rem;
+  }
+
+  .note-oval {
+    width: 160px;
+    height: 120px;
+    padding: 1rem 1.25rem;
+  }
+
+  .note-content {
+    font-size: 0.95rem;
+  }
+
+  .note-edit-btn {
+    opacity: 1;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .note-pentagon .note-edit-btn {
+    top: 18px;
+    right: 18px;
+  }
+
+  .note-oval .note-edit-btn {
+    top: 12px;
+    right: 18px;
+  }
 }

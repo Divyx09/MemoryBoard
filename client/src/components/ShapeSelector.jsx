@@ -4,12 +4,8 @@ const ShapeSelector = ({ selectedShape, onShapeChange }) => {
   const shapes = [
     { id: 'rectangle', name: 'Rectangle', icon: '▭' },
     { id: 'square', name: 'Square', icon: '◻' },
-    { id: 'circle', name: 'Circle', icon: '○' },
+    { id: 'pentagon', name: 'Pentagon', icon: '⬠' },
     { id: 'oval', name: 'Oval', icon: '⬭' },
-    { id: 'star', name: 'Star', icon: '★' },
-    { id: 'heart', name: 'Heart', icon: '♥' },
-    { id: 'hexagon', name: 'Hexagon', icon: '⬡' },
-    { id: 'triangle', name: 'Triangle', icon: '△' },
   ];
 
   return (

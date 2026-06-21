@@ -11,7 +11,7 @@
   "keywords": [
     "memory",
     "board",
-    "socket.io",
+    "rest-api",
     "express"
   ],
   "author": "",
@@ -21,8 +21,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^7.5.1",
-    "mongoose": "^8.0.3",
-    "socket.io": "^4.6.1"
+    "mongoose": "^8.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

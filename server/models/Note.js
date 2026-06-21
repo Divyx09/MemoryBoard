@@ -29,8 +29,13 @@ const noteSchema = new mongoose.Schema(
     },
     shape: {
       type: String,
-      enum: ['rectangle', 'square', 'circle', 'oval', 'star', 'heart', 'hexagon', 'triangle'],
+      enum: ['rectangle', 'square', 'circle', 'oval', 'pentagon', 'star', 'heart', 'hexagon', 'triangle'],
       default: 'rectangle',
+    },
+    name: {
+      type: String,
+      default: '',
+      maxlength: 50,
     },
   },
   {
