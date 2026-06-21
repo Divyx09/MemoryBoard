@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import Draggable from 'react-draggable';
 
 const Note = ({ note, onDragStop, onUpdateNote, localCreatorId }) => {
@@ -50,24 +50,40 @@ const Note = ({ note, onDragStop, onUpdateNote, localCreatorId }) => {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
 
-  // Define note sizes per shape to prevent boundary clipping
+  const [dimensions, setDimensions] = useState({ w: 0, h: 0 });
+
+  useLayoutEffect(() => {
+    if (nodeRef.current) {
+      const noteEl = nodeRef.current.querySelector('.note');
+      if (noteEl) {
+        setDimensions({
+          w: noteEl.offsetWidth,
+          h: noteEl.offsetHeight,
+        });
+      }
+    }
+  }, [note.content, note.name, note.shape, isEditing, windowSize]);
+
+  // Define note sizes per shape to prevent boundary clipping (fallback)
   const getNoteDimensions = (shape) => {
     const isMobile = windowSize.width < 640;
     switch (shape) {
       case 'rectangle':
-        return isMobile ? { w: 160, h: 120 } : { w: 230, h: 160 };
+        return isMobile ? { w: 170, h: 130 } : { w: 230, h: 160 };
       case 'square':
-        return isMobile ? { w: 130, h: 130 } : { w: 180, h: 180 };
+        return isMobile ? { w: 145, h: 145 } : { w: 180, h: 180 };
       case 'pentagon':
-        return isMobile ? { w: 140, h: 140 } : { w: 200, h: 200 };
+        return isMobile ? { w: 155, h: 155 } : { w: 200, h: 200 };
       case 'oval':
-        return isMobile ? { w: 160, h: 120 } : { w: 230, h: 160 };
+        return isMobile ? { w: 170, h: 130 } : { w: 230, h: 160 };
       default:
-        return isMobile ? { w: 160, h: 120 } : { w: 230, h: 160 };
+        return isMobile ? { w: 170, h: 130 } : { w: 230, h: 160 };
     }
   };
 
-  const { w: noteWidth, h: noteHeight } = getNoteDimensions(note.shape);
+  const defaultDims = getNoteDimensions(note.shape);
+  const noteWidth = dimensions.w || defaultDims.w;
+  const noteHeight = dimensions.h || defaultDims.h;
 
   // Convert stored percentage (0-100) back to actual pixel coordinate on render
   const getPixelCoords = () => {

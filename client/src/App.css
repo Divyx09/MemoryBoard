@@ -10,14 +10,14 @@ body {
   background: #0f172a;
   overflow: hidden;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
 }
 
 /* App Container */
 .app {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -27,7 +27,7 @@ body {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -42,7 +42,7 @@ body {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   z-index: 0;
   background: #020617;
@@ -60,24 +60,24 @@ body {
 /* Video Orientation Rotations */
 .background-video.rotate-0 {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   transform: translate(-50%, -50%) rotate(0deg);
 }
 
 .background-video.rotate-90 {
-  width: 100vh;
+  width: 100dvh;
   height: 100vw;
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
 .background-video.rotate-180 {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   transform: translate(-50%, -50%) rotate(180deg);
 }
 
 .background-video.rotate-270 {
-  width: 100vh;
+  width: 100dvh;
   height: 100vw;
   transform: translate(-50%, -50%) rotate(270deg);
 }
@@ -270,6 +270,7 @@ body {
           drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
   cursor: move;
   user-select: none;
+  touch-action: none;
   /* NO transform transitions here so react-draggable drags instantly and smoothly */
 }
 
@@ -297,6 +298,7 @@ body {
   
   /* Text vertical and horizontal centering */
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -319,26 +321,16 @@ body {
 }
 
 .note-author {
-  position: absolute;
-  bottom: 10px;
-  right: 15px;
+  position: relative;
+  margin-top: 8px;
   font-family: 'Caveat', cursive;
   font-size: 1.05rem;
   color: rgba(15, 23, 42, 0.75);
   font-weight: 700;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
   pointer-events: none;
-}
-
-/* Shape specific positioning for signature to avoid clipping */
-.note-pentagon .note-author {
-  bottom: 15px;
-  right: 30px;
-}
-
-.note-oval .note-author {
-  bottom: 20px;
-  right: 35px;
+  text-align: center;
+  align-self: center;
 }
 
 /* Edit Button & Editing Mode Styles */
@@ -394,7 +386,7 @@ body {
 
 .note-content-input {
   width: 100%;
-  height: 60%;
+  height: 100px;
   border: 1px solid rgba(15, 23, 42, 0.15);
   background: rgba(255, 255, 255, 0.25);
   border-radius: 8px;
@@ -489,13 +481,23 @@ body {
 }
 
 /* Shape-specific input and action safety overrides */
+.note-pentagon .note-content {
+  width: 75%;
+  max-width: 75%;
+}
+
+.note-oval .note-content {
+  width: 75%;
+  max-width: 75%;
+}
+
 .note-pentagon.editing {
   padding: 2.2rem 1.5rem 2.8rem 1.5rem;
 }
 
 .note-pentagon .note-content-input {
   width: 85%;
-  height: 48%;
+  height: 80px;
   font-size: 1.15rem;
 }
 
@@ -516,7 +518,7 @@ body {
 
 .note-oval .note-content-input {
   width: 85%;
-  height: 50%;
+  height: 80px;
   font-size: 1.15rem;
 }
 
@@ -533,37 +535,52 @@ body {
 
 /* Note Shape Customizations */
 .note-rectangle {
-  width: 230px;
-  height: 160px;
+  min-width: 230px;
+  min-height: 160px;
+  width: auto;
+  height: auto;
+  max-width: 450px;
   border-radius: 12px;
   padding: 1.5rem;
 }
 
 .note-square {
-  width: 180px;
-  height: 180px;
+  min-width: 180px;
+  min-height: 180px;
+  width: auto;
+  height: auto;
+  max-width: 450px;
   border-radius: 12px;
   padding: 1.5rem;
 }
 
 .note-pentagon {
-  width: 200px;
-  height: 200px;
+  min-width: 200px;
+  min-height: 200px;
+  width: auto;
+  height: auto;
+  max-width: 450px;
   clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
   padding: 2.2rem 1.6rem 1.5rem 1.6rem; /* extra top padding to keep text centered inside pentagon layout */
 }
 
 .note-oval {
-  width: 230px;
-  height: 160px;
+  min-width: 230px;
+  min-height: 160px;
+  width: auto;
+  height: auto;
+  max-width: 450px;
   border-radius: 50%;
   padding: 1.5rem 2rem;
 }
 
 /* Circle fallback (if needed) */
 .note-circle {
-  width: 180px;
-  height: 180px;
+  min-width: 180px;
+  min-height: 180px;
+  width: auto;
+  height: auto;
+  max-width: 450px;
   border-radius: 50%;
   padding: 1.5rem;
 }
@@ -652,24 +669,24 @@ body {
   }
 
   .note-rectangle {
-    width: 200px;
-    height: 140px;
+    min-width: 200px;
+    min-height: 140px;
   }
 
   .note-square {
-    width: 160px;
-    height: 160px;
+    min-width: 160px;
+    min-height: 160px;
   }
 
   .note-pentagon {
-    width: 170px;
-    height: 170px;
+    min-width: 170px;
+    min-height: 170px;
     padding-top: 1.8rem;
   }
 
   .note-oval {
-    width: 200px;
-    height: 140px;
+    min-width: 200px;
+    min-height: 140px;
   }
 
   .note-content {
@@ -751,27 +768,27 @@ body {
   }
 
   .note-rectangle {
-    width: 160px;
-    height: 120px;
+    min-width: 170px;
+    min-height: 130px;
     padding: 1rem;
   }
 
   .note-square {
-    width: 130px;
-    height: 130px;
+    min-width: 145px;
+    min-height: 145px;
     padding: 1rem;
   }
 
   .note-pentagon {
-    width: 140px;
-    height: 140px;
-    padding: 1.5rem 1rem 1rem 1rem;
+    min-width: 155px;
+    min-height: 155px;
+    padding: 1.6rem 1.2rem 1.2rem 1.2rem;
   }
 
   .note-oval {
-    width: 160px;
-    height: 120px;
-    padding: 1rem 1.25rem;
+    min-width: 170px;
+    min-height: 130px;
+    padding: 1.2rem 1.4rem;
   }
 
   .note-content {
@@ -795,5 +812,24 @@ body {
   .note-oval .note-edit-btn {
     top: 12px;
     right: 18px;
+  }
+
+  .note-rectangle, .note-square, .note-pentagon, .note-oval {
+    max-width: calc(100vw - 32px);
+  }
+
+  .note-content-input {
+    height: 70px;
+    font-size: 1.1rem;
+  }
+
+  .note-pentagon .note-content-input {
+    height: 55px;
+    font-size: 1rem;
+  }
+
+  .note-oval .note-content-input {
+    height: 60px;
+    font-size: 1rem;
   }
 }
