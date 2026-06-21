@@ -37,6 +37,10 @@ const noteSchema = new mongoose.Schema(
       default: '',
       maxlength: 50,
     },
+    creatorId: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

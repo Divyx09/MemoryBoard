@@ -64,6 +64,10 @@ app.get('/notes', async (req, res) => {
 app.post('/notes', async (req, res) => {
   try {
     console.log('📝 Creating note:', req.body);
+    const { creatorId } = req.body;
+    if (!creatorId) {
+      return res.status(400).json({ error: 'creatorId is required to create a note' });
+    }
     
     // Find the highest zIndex
     const highestNote = await Note.findOne().sort({ zIndex: -1 });
@@ -88,9 +92,22 @@ app.post('/notes', async (req, res) => {
 app.put('/notes/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { x, y, content, name } = req.body;
+    const { x, y, content, name, creatorId } = req.body;
     
-    console.log('📍 Updating note:', { id, x, y, content, name });
+    console.log('📍 Updating note:', { id, x, y, content, name, creatorId });
+
+    // Find the note first to verify ownership
+    const note = await Note.findById(id);
+    if (!note) {
+      return res.status(404).json({ error: 'Note not found' });
+    }
+
+    // Only enforce owner check if note has a creatorId AND we are editing content or name.
+    // Also allow superuser 'deep2004' to bypass.
+    const isEditingContent = content !== undefined || name !== undefined;
+    if (isEditingContent && note.creatorId && note.creatorId !== creatorId && creatorId !== 'deep2004') {
+      return res.status(403).json({ error: 'Forbidden: You are not the creator of this note' });
+    }
     
     // Find the highest zIndex to bring this note to front
     const highestNote = await Note.findOne().sort({ zIndex: -1 });
@@ -110,15 +127,11 @@ app.put('/notes/:id', async (req, res) => {
       { new: true }
     );
 
-    if (!updatedNote) {
-      return res.status(404).json({ error: 'Note not found' });
-    }
-    
-    console.log('✅ Note position updated successfully');
+    console.log('✅ Note updated successfully');
     res.json(updatedNote);
   } catch (error) {
-    console.error('❌ Error updating note position:', error);
-    res.status(500).json({ error: 'Failed to update note position' });
+    console.error('❌ Error updating note:', error);
+    res.status(500).json({ error: 'Failed to update note' });
   }
 });
 
@@ -126,11 +139,19 @@ app.put('/notes/:id', async (req, res) => {
 app.delete('/notes/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedNote = await Note.findByIdAndDelete(id);
-    
-    if (!deletedNote) {
+    const creatorId = req.headers['x-creator-id'] || req.query.creatorId;
+
+    const note = await Note.findById(id);
+    if (!note) {
       return res.status(404).json({ error: 'Note not found' });
     }
+
+    // Check ownership
+    if (note.creatorId && note.creatorId !== creatorId && creatorId !== 'deep2004') {
+      return res.status(403).json({ error: 'Forbidden: You are not authorized to delete this note' });
+    }
+
+    await Note.findByIdAndDelete(id);
     
     console.log('✅ Note deleted successfully');
     res.json({ message: 'Note deleted successfully' });

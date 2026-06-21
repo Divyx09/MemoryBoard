@@ -1,11 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 
-const Note = ({ note, onDragStop, onUpdateNote }) => {
+const Note = ({ note, onDragStop, onUpdateNote, localCreatorId }) => {
   const nodeRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(note.content);
   const [editedName, setEditedName] = useState(note.name || '');
+
+  // Determine if this user is allowed to edit/drag the note.
+  // We allow editing if:
+  // 1. The note has no creatorId (legacy note / backward compatibility)
+  // 2. The note's creatorId matches the client's localCreatorId
+  // 3. The client's localCreatorId is the admin/superuser bypass ID 'deep2004'
+  const isCreator = !note.creatorId || note.creatorId === localCreatorId || localCreatorId === 'deep2004';
 
   // Track window size dynamically for responsive positioning calculations
   const [windowSize, setWindowSize] = useState({
@@ -145,6 +152,7 @@ const Note = ({ note, onDragStop, onUpdateNote }) => {
         className="note-container"
         style={{
           zIndex: note.zIndex,
+          cursor: 'grab',
         }}
       >
         <div
@@ -199,14 +207,16 @@ const Note = ({ note, onDragStop, onUpdateNote }) => {
                   ~ {note.name}
                 </div>
               )}
-              <button
-                type="button"
-                className="note-edit-btn"
-                onClick={() => setIsEditing(true)}
-                title="Edit Note"
-              >
-                <EditIcon />
-              </button>
+              {isCreator && (
+                <button
+                  type="button"
+                  className="note-edit-btn"
+                  onClick={() => setIsEditing(true)}
+                  title="Edit Note"
+                >
+                  <EditIcon />
+                </button>
+              )}
             </>
           )}
         </div>

@@ -21,6 +21,18 @@ const getRandomRotation = () => {
   return Math.floor(Math.random() * 9) - 4; // -4 to +4
 };
 
+// Retrieve or generate a unique creatorId for this client
+const getOrCreateCreatorId = () => {
+  let id = localStorage.getItem('memory_board_creator_id');
+  if (!id) {
+    id = 'usr_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+    localStorage.setItem('memory_board_creator_id', id);
+  }
+  return id;
+};
+
+const creatorId = getOrCreateCreatorId();
+
 function App() {
   const [notes, setNotes] = useState([]);
   const [selectedShape, setSelectedShape] = useState('rectangle');
@@ -53,6 +65,7 @@ function App() {
       shape: shape || 'rectangle',
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
       rotation: getRandomRotation(),
+      creatorId,
     };
 
     try {
@@ -85,7 +98,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ x, y }),
+        body: JSON.stringify({ x, y, creatorId }),
       });
 
       if (response.ok) {
@@ -107,7 +120,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content, name }),
+        body: JSON.stringify({ content, name, creatorId }),
       });
 
       if (response.ok) {
@@ -170,6 +183,7 @@ function App() {
             note={note} 
             onDragStop={handleDragStop} 
             onUpdateNote={handleUpdateNote} 
+            localCreatorId={creatorId}
           />
         ))}
       </div>
